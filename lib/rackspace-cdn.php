@@ -27,18 +27,18 @@ class rackspace_cdn {
         self::$_settings = @parse_ini_file('settings.ini', TRUE);
 
         // validate current settings and/or get required.
-        self::setSetting('api', 'username', 'Please enter your username', '^[a-zA-Z0-9]{6,16}$');
-        self::setSetting('api', 'key', 'Please enter your API Key', '^[a-fA-F0-9]{32,}$');
+        self::setSetting('api', 'username', 'Please enter your username (between 6-16 chars)', '^[a-zA-Z0-9]{6,16}$');
+        self::setSetting('api', 'key', 'Please enter your API Key (32 char alphanum hash)', '^[a-fA-F0-9]{32,}$');
         self::setSetting('api', 'container', 'Please enter your container name', '^[a-zA-Z0-9]+$');
         self::setSetting('api', 'region', 'Please enter your containers region. (ie. DFW,IAD,ORD,LON,' .
                 'HKG,SYD)', '^(IAD|ORD|DFW|LON|HKG|SYD)$');
         
-        self::setSetting('files', 'path', 'Please enter the path to existing uploads folder or equivalent', '\([^\0 !$`&*()+]\|\\\(\ |\!|\$|\`|\&|\*|\(|\)|\+\)\)\+$');
+        self::setSetting('files', 'path', 'Please enter the path to existing uploads folder or equivalent (/path/to/files)', '^(/)?([^/\0]+(/)?)+$');
         
         self::setSetting('mysql', 'host', 'Please enter database hostname', '^[a-zA-Z0-9\.\-\_]+$');
         self::setSetting('mysql', 'host', 'Please enter database name', '^[a-zA-Z0-9\-\_]+$');
-        self::setSetting('mysql', 'username', 'Please enter database username', '^[\\x80-\\xff]{1,16}$');
-        self::setSetting('mysql', 'username', 'Please enter database password', '^[\\x80-\\xff]+$');
+        self::setSetting('mysql', 'username', 'Please enter database username (up to 16 ascii chars)', '^[\\x80-\\xff]{1,16}$');
+        self::setSetting('mysql', 'username', 'Please enter database password (ascii chars only)', '^[\\x80-\\xff]+$');
         
         // default to US.
         $id_endpoint = OpenCloud\Rackspace::US_IDENTITY_ENDPOINT;
