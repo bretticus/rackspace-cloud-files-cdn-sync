@@ -30,7 +30,7 @@ chmod +x /path/to/file/rackspace-cdn-sync
 ... or run it with your interpreter ... 
 
 ```bash
-sh /path/to/file/rackspace-cdn-sync
+bash /path/to/file/rackspace-cdn-sync
 ```
 
 Settings File

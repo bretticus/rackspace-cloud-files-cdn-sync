@@ -33,12 +33,12 @@ class rackspace_cdn {
         self::setSetting('api', 'region', 'Please enter your containers region. (ie. DFW,IAD,ORD,LON,' .
                 'HKG,SYD)', '^(IAD|ORD|DFW|LON|HKG|SYD)$');
         
-        self::setSetting('files', 'path', 'Please enter the path to existing uploads folder or equivalent', '^[^\s]+$');
+        self::setSetting('files', 'path', 'Please enter the path to existing uploads folder or equivalent', '\([^\0 !$`&*()+]\|\\\(\ |\!|\$|\`|\&|\*|\(|\)|\+\)\)\+$');
         
         self::setSetting('mysql', 'host', 'Please enter database hostname', '^[a-zA-Z0-9\.\-\_]+$');
-        self::setSetting('mysql', 'host', 'Please enter database name', '^[a-zA-Z0-9\.\-\_]+$');
-        self::setSetting('mysql', 'username', 'Please enter database username', '^[a-zA-Z0-9\.\-\_]+$');
-        self::setSetting('mysql', 'username', 'Please enter database password', '^[^\s]+$');
+        self::setSetting('mysql', 'host', 'Please enter database name', '^[a-zA-Z0-9\-\_]+$');
+        self::setSetting('mysql', 'username', 'Please enter database username', '^[\\x80-\\xff]{1,16}$');
+        self::setSetting('mysql', 'username', 'Please enter database password', '^[\\x80-\\xff]+$');
         
         // default to US.
         $id_endpoint = OpenCloud\Rackspace::US_IDENTITY_ENDPOINT;
