@@ -27,18 +27,24 @@ class rackspace_cdn {
         self::$_settings = @parse_ini_file('settings.ini', TRUE);
 
         // validate current settings and/or get required.
-        self::setSetting('api', 'username', 'Please enter your username (between 6-16 chars)', '^[a-zA-Z0-9]{6,16}$');
-        self::setSetting('api', 'key', 'Please enter your API Key (32 char alphanum hash)', '^[a-fA-F0-9]{32,}$');
-        self::setSetting('api', 'container', 'Please enter your container name', '^[a-zA-Z0-9]+$');
+        self::setSetting('api', 'username', 'Please enter your username (between 6-16 chars)', '/^[a-zA-Z0-9]{6,16}$/');
+        self::setSetting('api', 'key', 'Please enter your API Key (32 char alphanum hash)', '/^[a-fA-F0-9]{32,}$/');
+        self::setSetting('api', 'container', 'Please enter your container name', '/^[a-zA-Z0-9]+$/');
         self::setSetting('api', 'region', 'Please enter your containers region. (ie. DFW,IAD,ORD,LON,' .
-                'HKG,SYD)', '^(IAD|ORD|DFW|LON|HKG|SYD)$');
+                'HKG,SYD)', '/^(IAD|ORD|DFW|LON|HKG|SYD)$/');
         
-        self::setSetting('files', 'path', 'Please enter the path to existing uploads folder or equivalent (/path/to/files)', '^(/)?([^/\0]+(/)?)+$');
+        self::setSetting('files', 'path', 'Please enter the path to existing uploads folder or equivalent (/path/to/files)', function($path){
+            return file_exists($path);
+        });
         
-        self::setSetting('mysql', 'host', 'Please enter database hostname', '^[a-zA-Z0-9\.\-\_]+$');
-        self::setSetting('mysql', 'host', 'Please enter database name', '^[a-zA-Z0-9\-\_]+$');
-        self::setSetting('mysql', 'username', 'Please enter database username (up to 16 ascii chars)', '^[\\x80-\\xff]{1,16}$');
-        self::setSetting('mysql', 'username', 'Please enter database password (ascii chars only)', '^[\\x80-\\xff]+$');
+        self::setSetting('mysql', 'host', 'Please enter database hostname', '/^[a-zA-Z0-9\.\-\_]+$/');
+        self::setSetting('mysql', 'host', 'Please enter database name', '/^[a-zA-Z0-9\-\_]+$/');
+        self::setSetting('mysql', 'username', 'Please enter database username (up to 16 ascii chars)', function($username){            
+            return (ctype_print($username) && strlen($username) <= 16);
+        });
+        self::setSetting('mysql', 'username', 'Please enter database password (ascii chars only)', function($password){
+            return ctype_print($password);
+        });
         
         // default to US.
         $id_endpoint = OpenCloud\Rackspace::US_IDENTITY_ENDPOINT;
@@ -57,20 +63,30 @@ class rackspace_cdn {
         return TRUE;
     }
 
-    static private function setSetting($section, $setting, $prompt, $pattern) {
+    static private function setSetting($section, $setting, $prompt, $validator) {
+        
+        // make a preg_match closure otherwise
+        if (!(is_object($validator) && ($validator instanceof Closure))) {
+            $pattern = $validator;
+            $validator = function($value) use ($pattern) {
+                return preg_match($pattern, $value);
+            };
+        }
 
-        $get_value = function($value = NULL) use ($prompt, $pattern, $setting) {
-
+        $get_value = function($value = NULL) use ($prompt, $validator, $setting) {
+            
             $attempts = 5; // allow number of attempts before failing.
             $attempts_c = 1; // attempts counter
             // check initial value if supplied.
-            if (!is_null($value) && (is_string($value) && !preg_match('/' . $pattern . '/', $value))) {
+            if (!is_null($value) && (is_string($value) && !$validator($value))) {
+                var_dump($validator);
+                var_dump($value);
                 $value = NULL;
             }
             while (is_null($value) && $attempts_c <= $attempts) {
                 printf('[%d] %s: ', $attempts_c, $prompt);
                 fscanf(STDIN, "%s\n", $value); // reads value from STDIN
-                if (!preg_match('/' . $pattern . '/', $value)) {
+                if (!$validator($value)) {
                     $value = NULL;
                 }
                 $attempts_c++;
