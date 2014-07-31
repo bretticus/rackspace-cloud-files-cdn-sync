@@ -1,0 +1,17 @@
+{
+    "name": "olwmllc/rackspace-cloud-files-cdn-sync",
+    "description": "Sync existing files with rackspace and rackspace cdn plugin for wordpress",
+    "require": {
+        "php" : ">=5.3.3",
+        "rackspace/php-opencloud": "dev-master"
+    },
+    "require-dev": {
+    },
+    "authors": [
+        {
+            "name": "Brett Millett",
+            "email": "bretticus@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev"
+}
