@@ -16,7 +16,8 @@ class rackspace_cdn {
 
     /**
      * Main method for performing the sync
-     *
+     * @todo load entire object list to check against instead of checking one at a time.
+     * 
      * @return boolean
      */
     static public function doSync() {
@@ -68,7 +69,6 @@ class rackspace_cdn {
         ));
 
 
-
         try {
             // get instance of our object store
             $objectStoreService = self::$_client->objectStoreService(null, self::$_settings['api']['region']);
@@ -86,6 +86,8 @@ class rackspace_cdn {
                 $real_path = $file->getRealPath();
                 if (!is_dir($real_path)) {
                     $filename = str_replace(realpath(self::$_settings['files']['path']), '', $real_path);
+                    
+                    // get object list for dirtname prefix only
                     $dirname = dirname($filename);
                     if (!isset(self::$_objects[$dirname])) {
                         // get list of prefix only
@@ -97,6 +99,9 @@ class rackspace_cdn {
                             printf("Object name: %s\n", $object->getName());
                         }
                     }
+                    
+                    // way to slow to do one at a time!
+                    
 //                    if ($container->objectExists($filename)) {
 //                        $object = $container->getObject($filename);
 //                        printf('File with name: %s exists in object container: %s.' . PHP_EOL, $object->getName(), $container->name);
