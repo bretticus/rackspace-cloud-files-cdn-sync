@@ -150,8 +150,8 @@ class rackspace_cdn {
             $attempts_c = 1; // attempts counter
             // check initial value if supplied.
             if (!is_null($value) && (is_string($value) && !$validator($value))) {
-                var_dump($validator);
-                var_dump($value);
+//                var_dump($validator);
+//                var_dump($value);
                 $value = NULL;
             }
             while (is_null($value) && $attempts_c <= $attempts) {
