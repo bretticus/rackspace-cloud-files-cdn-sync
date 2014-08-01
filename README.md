@@ -2,8 +2,9 @@
 =============
 Stand-alone PHP script to compliment 
 [Rackspace CDN plugin for Wordpress](https://wordpress.org/plugins/rackspace-cloud-files-cdn/). 
-Useful if you have to sync a large amount of wordpress uploads and you don't want to re-upload. 
-Using a standalone script eliminates Apache or nginx + php-fpm timeout issues.
+Useful if you need to sync a large amount of wordpress uploads and you don't 
+want to re-upload exiting files. Using a standalone script eliminates Apache or 
+nginx + php-fpm timeout issues.
 
 Requirements
 ------------
