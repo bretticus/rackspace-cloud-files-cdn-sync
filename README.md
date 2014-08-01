@@ -6,6 +6,8 @@ Useful if you need to sync a large amount of wordpress uploads and you don't
 want to re-upload exiting files. Using a standalone script eliminates Apache or 
 nginx + php-fpm timeout issues.
 
+**Script is currently BROKEN**
+
 Requirements
 ------------
 * PHP >=5.3.3
