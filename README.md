@@ -1,4 +1,7 @@
 **rackspace-cloud-files-cdn-sync**
+=============
+Stand-alone PHP script to compliment 
+[Rackspace CDN plugin for Wordpress](https://wordpress.org/plugins/rackspace-cloud-files-cdn/).
 
 Requirements
 ------------
